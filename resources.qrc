@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/">
+        <file>about.jpeg</file>
+        <file>keysight4.jpeg</file>
+        <file>mxpbapp.jpg</file>
+    </qresource>
+</RCC>
