@@ -10,14 +10,33 @@ mxpb4ant::mxpb4ant(QWidget *parent)
 
     loadSettings();
 
+    qDebug() << "workingPath = " << _workingPath;
+
     if (_workingPath == "")
-        _workingPath = "/home/mandbx/temp/NSA_cert_parts/";
+    {
+        //linux
+        //_workingPath = "/home/mandbx/temp/NSA_cert_parts/";
+        _workingPath = "C:/Users/mpurtell/Desktop/Desktop-files/3110C-3110C_pair_data";
+    }
+
+    qDebug() << "outputFilePath = " << _outputFilePath;
 
     if(_outputFilePath == "")
-        _outputFilePath = "/home/mandbx/temp/";
+    {
+        //linux
+       // _outputFilePath = "/home/mandbx/temp";
+        _outputFilePath = "C:/Temp/";
+    }
+
+    qDebug() << "freqRefpath == " << _freqRefPath;
 
     if (_freqRefPath == "")
-        _freqRefPath = "/home/mandbx/Qt-training/mxpb4ant/";
+    {
+        //linux
+        //_freqRefPath = "/home/mandbx/Qt-training/mxpb4ant/";
+        _freqRefPath = "C:/qtTraining/mxpb4ant/mxpb4ant";
+    }
+
 
 }
 

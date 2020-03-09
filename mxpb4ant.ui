@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>761</width>
-    <height>600</height>
+    <width>771</width>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -241,7 +241,7 @@
         <property name="maximumSize">
          <size>
           <width>200</width>
-          <height>325</height>
+          <height>9000</height>
          </size>
         </property>
        </widget>
@@ -301,7 +301,7 @@
         <property name="maximumSize">
          <size>
           <width>200</width>
-          <height>325</height>
+          <height>9000</height>
          </size>
         </property>
        </widget>
@@ -361,7 +361,7 @@
         <property name="maximumSize">
          <size>
           <width>200</width>
-          <height>325</height>
+          <height>9000</height>
          </size>
         </property>
        </widget>
@@ -415,8 +415,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>761</width>
-     <height>23</height>
+     <width>771</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
