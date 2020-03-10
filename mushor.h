@@ -39,7 +39,7 @@ public:
     QString getKey();
 
     int getReportListCount();
-
+    QVector <ACFDataPoint> getOutputVector();
 
 private:
 

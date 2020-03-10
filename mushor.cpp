@@ -123,6 +123,11 @@ int Mushor::getReportListCount()
     return _ReportList.count();
 }
 
+QVector<ACFDataPoint> Mushor::getOutputVector()
+{
+    return _ReportList;
+}
+
 void Mushor::listFreqRefLines()
 {
     for (int i = 0; i < _freqList.count(); i++)
@@ -206,6 +211,7 @@ bool Mushor::mush()
         setCurrentParams(_baseList[_nextACFIDX].getLevel(), _baseList[_currentACFIDX].getLevel(), _baseList[_nextACFIDX].getfreq(), _baseList[_currentACFIDX].getfreq());
         slopedACF = calcSlopedValue(currentAcfFreq);
         ACFDataPoint * dPoint = new ACFDataPoint(currentAcfFreq, slopedACF);
+
         _ReportList.append(*dPoint);
 
         startIDX = _currentACFIDX;

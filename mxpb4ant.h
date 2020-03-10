@@ -2,6 +2,9 @@
 #define MXPB4ANT_H
 
 #include "freqref.h"
+#include "acfdatapoint.h"
+#include "mushor.h"
+
 
 #include <QMainWindow>
 #include <QDialog>
@@ -17,6 +20,7 @@
 #include <QFileInfo>
 #include <QRegExp>
 #include <algorithm>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mxpb4ant; }
@@ -43,8 +47,21 @@ private slots:
 
     void on_btnOutputFile_clicked();
 
+    void on_btnExecute_clicked();
+
 private:
     Ui::mxpb4ant *ui;
+
+
+    // debug methods
+    void initForWindows();
+    void initForLinux();
+    void listThisList(QStringList list);
+
+    void setFreqVector(QStringList list);
+    void setValuesVector(QStringList list);
+
+    void writeListToFile(QString filename, QVector<ACFDataPoint> list);
 
     // methods
    void saveSettings();
@@ -54,15 +71,23 @@ private:
    void setFreqRefPath(QString path);
 
    QStringList loadListfromFile(QString fileName);
+   QStringList cleanList(QStringList list, QString fileName);
+   QVector<ACFDataPoint> freqVectorList;
+   QVector<ACFDataPoint> valuesVectorList;
+   QVector<ACFDataPoint> resultList;
+
 
    void fillFreqList(QStringList list);
    void fillFreqRefList(QStringList list, int startAt);
    void fillInputList(QStringList list, int startAt);
 
+   void fillOutputList();
+
    QString getDelim(QString fileName);
 
    int findFirstDataRow(QStringList list, QString delimiter);
 
+   bool CheckForValidRanges(QStringList freqList, QStringList valuesList, QString vFname);
 
    // variables
    QString _workingPath;
@@ -76,6 +101,11 @@ private:
    // lists
    QStringList _FreqRefListRaw;
    QStringList _InputListRaw;
+   QStringList _InputListCleaned;
+
+   bool _freqRefHasBeenSet = false;
+   bool _inputFileHasBeenSet = false;
+   bool _outputFileHasBeenSet = false;
 
    //objects
   // FreqRef _freqRef;
