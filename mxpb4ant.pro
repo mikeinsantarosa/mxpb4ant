@@ -26,7 +26,6 @@ HEADERS += \
     about.h \
     acfdatapoint.h \
     freqref.h \
-    globals.h \
     mushor.h \
     mxpb4ant.h \
     version.h
