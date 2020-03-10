@@ -12,7 +12,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/mxpbapp.jpg</normaloff>:/mxpbapp.jpg</iconset>
+    <normaloff>:/mxpb4ant.ico</normaloff>:/mxpb4ant.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">

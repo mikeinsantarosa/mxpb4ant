@@ -2,7 +2,7 @@
     <qresource prefix="/images"/>
     <qresource prefix="/">
         <file>about.jpeg</file>
-        <file>keysight4.jpeg</file>
-        <file>mxpbapp.jpg</file>
+        <file>mxpb4ant.ico</file>
+        <file>mxpb4ant.jpg</file>
     </qresource>
 </RCC>
