@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <QVector>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class mxpb4ant; }
 QT_END_NAMESPACE
@@ -33,6 +34,8 @@ class mxpb4ant : public QMainWindow
 public:
     mxpb4ant(QWidget *parent = nullptr);
     ~mxpb4ant();
+
+
 
 private slots:
     void on_actionAbout_triggered();
@@ -49,6 +52,8 @@ private slots:
 
     void on_btnExecute_clicked();
 
+    void on_btnSetFreqRef_clicked();
+
 private:
     Ui::mxpb4ant *ui;
 
@@ -63,6 +68,8 @@ private:
 
     void writeListToFile(QString filename, QVector<ACFDataPoint> list);
 
+    void setFreqRefFile();
+
     // methods
    void saveSettings();
    void loadSettings();
@@ -75,6 +82,29 @@ private:
    QVector<ACFDataPoint> freqVectorList;
    QVector<ACFDataPoint> valuesVectorList;
    QVector<ACFDataPoint> resultList;
+
+   enum class _mxpbRanges
+     {
+        InStartFreq = 0,
+        InStopFreq,
+        OutStartFreq,
+        OutStopFreq
+     };
+
+
+   struct FreqRanges
+   {
+   double startInFreq = 0;
+   double stopInFreq = 0;
+   double startOutFreq = 0;
+   double stopOutFreq = 0;
+   } freqRanges;
+
+
+
+   // error messages
+   void showOutOfRangeMessage();
+   void showMissingInfoMessage();
 
 
    void fillFreqList(QStringList list);

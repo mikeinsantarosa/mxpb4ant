@@ -50,7 +50,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/keysight4.jpeg</pixmap>
+        <pixmap resource="resources.qrc">:/keysight.ico</pixmap>
        </property>
       </widget>
      </item>

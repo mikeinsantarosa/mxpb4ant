@@ -11,6 +11,14 @@ mxpb4ant::mxpb4ant(QWidget *parent)
     initForLinux();
     //initForWindows();
 
+    _inputFileHasBeenSet = false;
+    _outputFileHasBeenSet = false;
+    _freqRefHasBeenSet = false;
+    _currentOutputFileName = "";
+    _currentInputFileName = "";
+
+
+
     loadSettings();
 
 }
@@ -26,6 +34,7 @@ void mxpb4ant::on_actionAbout_triggered()
     // show about dialog
     About *about = new About;
     about->show();
+
 
 }
 
@@ -146,6 +155,50 @@ QStringList mxpb4ant::cleanList(QStringList list, QString fileName)
     return result;
 
 
+}
+
+void mxpb4ant::showOutOfRangeMessage()
+{
+    QMessageBox msgBox;
+        QString message = "";
+
+        message.append("The range of input frequencies ");
+        message.append(QString::number(freqRanges.startInFreq) + "Hz to " + QString::number(freqRanges.stopInFreq) + "Hz ");
+        message.append(" is outside the bounds of your corection data frequency range ");
+        message.append(QString::number(freqRanges.startOutFreq) + "Hz to " + QString::number(freqRanges.stopOutFreq) + "Hz. ");
+        message.append("You need to adjust one of the ranges.");
+
+
+        msgBox.setText(message);
+        msgBox.setInformativeText("The input range must be within the range of the correction data.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+
+        int ret = msgBox.exec();
+
+}
+
+void mxpb4ant::showMissingInfoMessage()
+{
+    //_inputFileHasBeenSet == true && _outputFileHasBeenSet == true &&  _freqRefHasBeenSet == true
+    if(_freqRefHasBeenSet == false)
+    {
+        //show missing freq ref file
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this,"Missing file set", "The freq ref file hasn't been set yet!",QMessageBox::Ok);
+    }
+    else if (_inputFileHasBeenSet == false)
+    {
+        //show missing input file
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this,"Missing file set", "The input corrections file hasn't been set yet!",QMessageBox::Ok);
+    }
+    else if (_outputFileHasBeenSet == false)
+    {
+        //show missing output file
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this,"Missing file set", "The output destination file hasn't been set yet!",QMessageBox::Ok);
+    }
 }
 
 void mxpb4ant::fillFreqRefList(QStringList list, int startAt)
@@ -310,6 +363,9 @@ bool mxpb4ant::CheckForValidRanges(QStringList freqList, QStringList valuesList,
     qDebug() << "Starts...f1/f1val" << f1 << "/" << f1Val;
     qDebug() << "Stops....f2/f2val" << f2 << "/" << f2Val;
 
+
+
+
     if (f1 < f1Val)
     {
         result = false;
@@ -320,6 +376,12 @@ bool mxpb4ant::CheckForValidRanges(QStringList freqList, QStringList valuesList,
     }
 
     qDebug() << "start F/acfF" << f1 << "/" << f1Val << "stop F/acf F" << f2 << "/" << f2Val;
+
+
+    freqRanges.startInFreq = f1;
+    freqRanges.stopInFreq = f2;
+    freqRanges.startOutFreq = f1Val;
+    freqRanges.stopOutFreq = f2Val;
 
     return result;
 
@@ -336,35 +398,7 @@ void mxpb4ant::on_btnClose_clicked()
 
 void mxpb4ant::on_actionSet_Freq_Ref_File_triggered()
 {
-    qDebug() << "getting freq Ref file";
-    QString fileToOpen = QFileDialog::getOpenFileName(this,
-                                                      "Open File", _freqRefPath,"Text Files (*.txt);; CSV Files (*.csv)");
-
-    if(!fileToOpen.isEmpty())
-    {
-
-
-        QFileInfo fileinf = QFileInfo(fileToOpen);
-        _freqRefPath = fileinf.path();
-
-        _currentFreqRefFileName = fileToOpen;
-        ui->lblFreqRefFile->setText(fileToOpen);
-
-        QString delim = getDelim(fileToOpen);
-        qDebug() << "freq ref delim = " << delim;
-
-        // do list work
-        _FreqRefListRaw = loadListfromFile(fileToOpen);
-
-       // int startPos = findFirstDataRow(_FreqRefListRaw, delim);
-
-        fillFreqRefList(_FreqRefListRaw, 0);
-        setFreqVector(_FreqRefListRaw);
-        saveSettings();
-        _freqRefHasBeenSet = true;
-    }
-
-    qDebug() << "Number of values in freq ref vector " << freqVectorList.count();
+    setFreqRefFile();
 
 }
 
@@ -557,25 +591,55 @@ void mxpb4ant::writeListToFile(QString filename, QVector<ACFDataPoint> list)
 
 }
 
+void mxpb4ant::setFreqRefFile()
+{
+
+    QString fileToOpen = QFileDialog::getOpenFileName(this,
+                                                      "Open File", _freqRefPath,"Text Files (*.txt);; CSV Files (*.csv)");
+
+    if(!fileToOpen.isEmpty())
+    {
+
+
+        QFileInfo fileinf = QFileInfo(fileToOpen);
+        _freqRefPath = fileinf.path();
+
+        _currentFreqRefFileName = fileToOpen;
+        ui->lblFreqRefFile->setText(fileToOpen);
+
+        QString delim = getDelim(fileToOpen);
+        qDebug() << "freq ref delim = " << delim;
+
+        // do list work
+        _FreqRefListRaw = loadListfromFile(fileToOpen);
+
+       // int startPos = findFirstDataRow(_FreqRefListRaw, delim);
+
+        fillFreqRefList(_FreqRefListRaw, 0);
+        setFreqVector(_FreqRefListRaw);
+        saveSettings();
+        _freqRefHasBeenSet = true;
+    }
+
+
+}
+
 void mxpb4ant::on_btnExecute_clicked()
 {
+
     bool OKtoGo;
-    QFileInfo info = QFileInfo(_currentOutputFileName);
-    QString folder = info.path();
-    OKtoGo = CheckForValidRanges(_FreqRefListRaw, _InputListCleaned,_currentInputFileName);
 
-    if(OKtoGo == true)
+    if(_inputFileHasBeenSet == true && _outputFileHasBeenSet == true &&  _freqRefHasBeenSet == true)
     {
-        QString f1 = "/home/mandbx/temp/tx.txt";
-        QString f2 = "/home/mandbx/temp/rx.txt";
+        QFileInfo info = QFileInfo(_currentOutputFileName);
+        QString folder = info.path();
+        OKtoGo = CheckForValidRanges(_FreqRefListRaw, _InputListCleaned, _currentInputFileName);
 
-        qDebug() << "ranges goot to go = " << OKtoGo;
+        if (OKtoGo == true)
+        {
+            QString f1 = "/home/mandbx/temp/tx.txt";
+            QString f2 = "/home/mandbx/temp/rx.txt";
 
-        if(_inputFileHasBeenSet == true && _outputFileHasBeenSet == true &&  _freqRefHasBeenSet == true)
-         {
-                // _currentOutputFileName
-                // valuesVectorList
-                // freqVectorList
             Mushor *m = new Mushor("keyMe",this);
             m->setFreqList(freqVectorList);
             m->setListToTranslate(valuesVectorList);
@@ -587,22 +651,31 @@ void mxpb4ant::on_btnExecute_clicked()
             resultList.clear();
             if (m->getReportListCount()>0)
             {
-               resultList = m->getOutputVector();
+                resultList = m->getOutputVector();
 
-               // fill the list and save the data
-               fillOutputList();
+                // fill the list and save the data
+                fillOutputList();
 
-               writeListToFile(_currentOutputFileName, resultList);
+                writeListToFile(_currentOutputFileName, resultList);
 
             }
 
-         }
-         else
-         {
-             qDebug() << "not all items have been set";
-         }
-
+        }
+        else
+        {
+            showOutOfRangeMessage();
+        }
+    }
+    else
+    {
+       showMissingInfoMessage();
     }
 
+}
 
+
+void mxpb4ant::on_btnSetFreqRef_clicked()
+{
+    // set the freq ref file
+    setFreqRefFile();
 }
