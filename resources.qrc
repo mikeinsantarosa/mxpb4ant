@@ -5,5 +5,8 @@
         <file>mxpb4ant.ico</file>
         <file>mxpb4ant.jpg</file>
         <file>keysight.ico</file>
+        <file>Calc4Keys.ico</file>
+        <file>calcKeys.ico</file>
+        <file>calColor.ico</file>
     </qresource>
 </RCC>

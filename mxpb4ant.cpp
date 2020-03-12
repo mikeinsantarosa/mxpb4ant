@@ -11,6 +11,13 @@ mxpb4ant::mxpb4ant(QWidget *parent)
     initForLinux();
     //initForWindows();
 
+    QString ver = QString("%1.%2.%3").arg(MY_MAJOR_VERSION).arg(MY_MEAN_VERSION).arg(MY_MINOR_VERSION);
+
+    QString chartTitle = "";
+    chartTitle.append("Hardware Test Center - MX+B Corrections Calculator: ");
+    chartTitle.append(ver);
+    this->setWindowTitle(chartTitle);
+
     _inputFileHasBeenSet = false;
     _outputFileHasBeenSet = false;
     _freqRefHasBeenSet = false;
@@ -678,4 +685,10 @@ void mxpb4ant::on_btnSetFreqRef_clicked()
 {
     // set the freq ref file
     setFreqRefFile();
+}
+
+void mxpb4ant::on_actionSlope_Calculator_triggered()
+{
+    //qDebug() << "CLicked open slope calculator";
+    sc->show();
 }

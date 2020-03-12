@@ -4,6 +4,7 @@
 #include "freqref.h"
 #include "acfdatapoint.h"
 #include "mushor.h"
+#include "slopecalculator.h"
 
 
 #include <QMainWindow>
@@ -54,8 +55,11 @@ private slots:
 
     void on_btnSetFreqRef_clicked();
 
+    void on_actionSlope_Calculator_triggered();
+
 private:
     Ui::mxpb4ant *ui;
+    slopecalculator *sc = new slopecalculator;
 
 
     // debug methods

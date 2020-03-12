@@ -390,16 +390,16 @@
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionSet_Freq_Ref_File"/>
+    <addaction name="actionSlope_Calculator"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionSet_Freq_Ref_File">
+  <action name="actionSlope_Calculator">
    <property name="text">
-    <string>Set Freq Ref File</string>
+    <string>Slope Calculator</string>
    </property>
   </action>
   <action name="actionAbout">

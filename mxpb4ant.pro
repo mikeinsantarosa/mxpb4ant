@@ -20,7 +20,8 @@ SOURCES += \
     acfdatapoint.cpp \
     main.cpp \
     mushor.cpp \
-    mxpb4ant.cpp
+    mxpb4ant.cpp \
+    slopecalculator.cpp
 
 HEADERS += \
     about.h \
@@ -28,11 +29,13 @@ HEADERS += \
     freqref.h \
     mushor.h \
     mxpb4ant.h \
+    slopecalculator.h \
     version.h
 
 FORMS += \
     about.ui \
-    mxpb4ant.ui
+    mxpb4ant.ui \
+    slopecalculator.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
