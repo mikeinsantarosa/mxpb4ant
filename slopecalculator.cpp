@@ -52,7 +52,7 @@ void slopecalculator::loadSettings()
     setting.beginGroup("ProgramFolders");
 
     QRect rect = setting.value("SC-StartupPosition").toRect();
-    qDebug() << "default x = "<<  rect.x();
+
     if (rect.x() > -1)
     {
         setGeometry(rect);

@@ -43,10 +43,6 @@ private slots:
 
     void on_btnClose_clicked();
 
-//    void on_actionSet_Freq_Ref_File_triggered();
-
-    void on_actionSet_Freq_Ref_File_triggered();
-
     void on_btnInputFile_clicked();
 
     void on_btnOutputFile_clicked();
@@ -60,6 +56,7 @@ private slots:
 private:
     Ui::mxpb4ant *ui;
     slopecalculator *sc = new slopecalculator;
+
 
 
     // debug methods

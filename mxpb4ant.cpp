@@ -367,11 +367,6 @@ bool mxpb4ant::CheckForValidRanges(QStringList freqList, QStringList valuesList,
     f1Val = d1.at(0).toDouble();
     f2Val = d2.at(0).toDouble();
 
-    qDebug() << "Starts...f1/f1val" << f1 << "/" << f1Val;
-    qDebug() << "Stops....f2/f2val" << f2 << "/" << f2Val;
-
-
-
 
     if (f1 < f1Val)
     {
@@ -381,8 +376,6 @@ bool mxpb4ant::CheckForValidRanges(QStringList freqList, QStringList valuesList,
     {
         result = false;
     }
-
-    qDebug() << "start F/acfF" << f1 << "/" << f1Val << "stop F/acf F" << f2 << "/" << f2Val;
 
 
     freqRanges.startInFreq = f1;
@@ -403,16 +396,8 @@ void mxpb4ant::on_btnClose_clicked()
 
 
 
-void mxpb4ant::on_actionSet_Freq_Ref_File_triggered()
-{
-    setFreqRefFile();
-
-}
-
 void mxpb4ant::on_btnInputFile_clicked()
 {
-    qDebug() << "getting input file";
-
 
     QString InputFile = QFileDialog::getOpenFileName(this,"Open File", _workingPath,
                                                       "Text Files (*.txt);; CSV Files (*.csv)");
@@ -435,7 +420,6 @@ void mxpb4ant::on_btnInputFile_clicked()
 
         setValuesVector(_InputListCleaned);
 
-        qDebug() << "number of values in vector " << valuesVectorList.count() ;
 
         _inputFileHasBeenSet = true;
 
@@ -447,14 +431,49 @@ void mxpb4ant::on_btnInputFile_clicked()
 
 void mxpb4ant::on_btnOutputFile_clicked()
 {
-    qDebug() << "getting output file";
     QString OutputFile = QFileDialog::getSaveFileName(this,"Save File", _outputFilePath,
-                                                      "Text Files (*.txt);; CSV Files (*.csv)");
+                                                   "Text Files (*.txt);; CSV Files (*.csv)");
+
+
+    QString defaultExtension = ".txt";
+    QString defaultMatch = "txt";
+    QString alternateExtension = ".csv";
+    QString altMatch = "csv";
+
 
     if(!OutputFile.isEmpty())
     {
         QFileInfo fileinf = QFileInfo(OutputFile);
         _outputFilePath = fileinf.path();
+
+        if(fileinf.suffix().isEmpty())
+        {
+            //qDebug() << "adding default file extension";
+            OutputFile.append(defaultExtension);
+        }
+        else if (fileinf.suffix()== defaultMatch)
+        {
+            // do nothing
+            //qDebug() << "file extension is " << fileinf.suffix();
+        }
+        else if (fileinf.suffix()== altMatch)
+        {
+            // do nothing
+        }
+        else
+        {
+            QString path = fileinf.path();
+            QString fname = fileinf.baseName();
+            QString newFile = "";
+            newFile.append(path + "/");
+            newFile.append(fname);
+            newFile.append(defaultExtension);
+            OutputFile = newFile;
+
+        }
+
+       // qDebug() << "will be using " << OutputFile;
+
 
         _currentOutputFileName = OutputFile;
         ui->lblOutputFile->setText(OutputFile);
@@ -570,29 +589,29 @@ void mxpb4ant::writeListToFile(QString filename, QVector<ACFDataPoint> list)
     double freq, level;
     ACFDataPoint point;
 
+    QString delim = getDelim(filename);
 
+    QFile fOut(filename);
+    if(fOut.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream s(&fOut);
+        for(int i = 0; i < resultList.count(); i++)
+        {
+            target.clear();
+            point = resultList.at(i);
+            freq = point.getfreq();
+            level = point.getLevel();
+            fVal = QString::number(freq);
+            lVal = QString::number(level);
 
-            QFile fOut(filename);
-            if(fOut.open(QFile::WriteOnly | QFile::Text))
-            {
-                QTextStream s(&fOut);
-                for(int i = 0; i < resultList.count(); i++)
-                {
-                    target.clear();
-                    point = resultList.at(i);
-                    freq = point.getfreq();
-                    level = point.getLevel();
-                    fVal = QString::number(freq);
-                    lVal = QString::number(level);
-
-                    s << fVal <<  "\t" << lVal << '\n';
-                }
-            }
-            else
-            {
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::critical(this,"File Write problem","Couldn't open the file [" + filename + "] for writing!",QMessageBox::Ok);
-            }
+            s << fVal <<  delim << lVal << '\n';
+        }
+    }
+    else
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this,"File Write problem","Couldn't open the file [" + filename + "] for writing!",QMessageBox::Ok);
+    }
 
 
 
@@ -615,7 +634,6 @@ void mxpb4ant::setFreqRefFile()
         ui->lblFreqRefFile->setText(fileToOpen);
 
         QString delim = getDelim(fileToOpen);
-        qDebug() << "freq ref delim = " << delim;
 
         // do list work
         _FreqRefListRaw = loadListfromFile(fileToOpen);
