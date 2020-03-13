@@ -8,8 +8,8 @@ mxpb4ant::mxpb4ant(QWidget *parent)
 {
     ui->setupUi(this);
 
-    initForLinux();
-    //initForWindows();
+    //initForLinux();
+    initForWindows();
 
     QString ver = QString("%1.%2.%3").arg(MY_MAJOR_VERSION).arg(MY_MEAN_VERSION).arg(MY_MINOR_VERSION);
 
@@ -241,7 +241,7 @@ void mxpb4ant::fillOutputList()
     ui->listOutputs->clear();
     QString target, fVal, lVal;
     double freq, level;
-
+    QString delim = getDelim(_currentOutputFileName);
 
     for(int i = 0; i < resultList.count(); i++)
     {
@@ -252,7 +252,7 @@ void mxpb4ant::fillOutputList()
         fVal = QString::number(freq);
         lVal = QString::number(level);
 
-        ui->listOutputs->addItem(fVal + "\t" + lVal);
+        ui->listOutputs->addItem(fVal + delim + lVal);
     }
 }
 

@@ -46,4 +46,6 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
+    HP 84310-80019 SN_351 2041039_Transfer Impedance_Post.csv \
+    HP 84310-80019 SN_351 2041039_Transfer Impedance_Post.csv \
     freq-ref-list.txt
